@@ -6,7 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\{Role, Admin};
+use Illuminate\Database\Eloquent\Relations\{HasOne, BelongsTo};
+use App\Models\{Role, Admin, Pemilik};
 
 class User extends Authenticatable
 {
@@ -47,23 +48,18 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the role that owns the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }
 
-    /**
-     * Get the admin associated with the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
     public function admin(): HasOne
     {
         return $this->hasOne(Admin::class);
+    }
+
+    public function pemilik(): HasOne
+    {
+        return $this->hasOne(Pemilik::class);
     }
 }

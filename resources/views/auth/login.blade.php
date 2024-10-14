@@ -19,7 +19,7 @@
                         {{ Session('message') }}
                     </div>
                 @endif
-                <form method="POST" action="{{ route('loginProses') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('authenticate') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row justify-content-center">
                         <div class="row">
@@ -54,7 +54,7 @@
                             <button type="submit" class="btn btn-primary" style="width:97%">
                                 {{ __('Login') }}
                             </button>
-                            <a href="{{ route('register') }}" class="text-center my-3">Belum Punya Akun?</a>
+                            {{-- <a href="{{ route('register') }}" class="text-center my-3">Belum Punya Akun?</a> --}}
                         </div>
                     </div>
 

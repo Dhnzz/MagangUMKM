@@ -52,6 +52,7 @@
 
 <body>
 
+
     <!-- ======= Header ======= -->
     <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -79,17 +80,17 @@
                         "
                             alt="Profile" class="rounded-circle">
                         <span
-                            class="d-none d-md-block dropdown-toggle ps-2 text-capitalize">{{ auth()->user()->role }}</span>
+                            class="d-none d-md-block dropdown-toggle ps-2 text-capitalize">{{ Auth::user()->role->name }}</span>
                     </a>
                     <!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
                             <h6 class="text-capitalize">
-                                @if (auth()->user()->role == 'admin')
-                                    {{ auth()->user()->admin->nama }}
-                                @elseif (auth()->user()->role == 'pemilik')
-                                    {{ auth()->user()->nama }}
+                                @if (Auth::user()->role->slug == 'admin')
+                                    {{ Auth::user()->admin->name }}
+                                @elseif (Auth::user()->role->slug == 'pemilik')
+                                    {{ Auth::user()->pemilik->name }}
                                 @endif
                             </h6>
                         </li>
@@ -129,10 +130,13 @@
                         </li>
 
                         <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('logout') }}">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Log Out</span>
-                            </a>
+                            <form action="{{route('logout')}}" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <button class="dropdown-item d-flex align-items-center" type="submit">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Log Out</span>
+                                </button>
+                            </form>
                         </li>
 
                     </ul>
@@ -152,15 +156,15 @@
 
         <ul class="sidebar-nav" id="sidebar-nav">
 
-            <li class="nav-item">
-                <a class="nav-link {{ Request::is('dashboard*') ? 'active' : 'collapsed' }}"
-                    href="{{ route('dashboard') }}">
-                    <i class="fa-solid fa-gauge-high"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-
-            @if (auth()->user()->role == 'admin')
+            @if (Auth::user()->role->slug == 'admin')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('dashboard.admin*') ? 'active' : 'collapsed' }}"
+                        href="{{ route('dashboard.admin') }}">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                {{--
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('pemilik*') ? 'active' : 'collapsed' }}"
                         href="{{ route('pemilik.index') }}">
@@ -169,24 +173,34 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('area*') ? 'active' : 'collapsed' }}" href="{{route('area.index')}}">
+                    <a class="nav-link {{ Request::is('area*') ? 'active' : 'collapsed' }}"
+                        href="{{ route('area.index') }}">
                         <i class="fa-solid fa-map-pin"></i>
                         <span>Area</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('jenis*') ? 'active' : 'collapsed' }}" href="{{route('jenis.index')}}">
+                    <a class="nav-link {{ Request::is('jenis*') ? 'active' : 'collapsed' }}"
+                        href="{{ route('jenis.index') }}">
                         <i class="fa-solid fa-shop"></i>
                         <span>Jenis UMKM</span>
                     </a>
-                </li>
-            @elseif(auth()->user()->role == 'pemilik')
+                </li> --}}
+            @elseif(Auth::user()->role->slug == 'pemilik')
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('umkm*') ? 'active' : 'collapsed' }}" href="{{route('umkm.index')}}">
+                    <a class="nav-link {{ Request::is('dashboard.pemilik*') ? 'active' : 'collapsed' }}"
+                        href="{{ route('dashboard.pemilik') }}">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">
+                    <a class="nav-link {{ Request::is('umkm*') ? 'active' : 'collapsed' }}"
+                        href="{{ route('umkm.index') }}">
                         <i class="fa-solid fa-shop"></i>
                         <span>UMKM</span>
                     </a>
-                </li>
+                </li> --}}
             @endif
 
             <!-- End Dashboard Nav -->
@@ -539,8 +553,7 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         $(document).ready(function() {
             $('.dataTable').DataTable();

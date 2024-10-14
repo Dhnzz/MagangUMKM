@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\{User, Admin, Role};
+use App\Models\{User, Admin, Pemilik, Role};
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,10 +16,11 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call(RoleSeeder::class);
 
-        $role = Role::where('slug', 'admin')->first();
+        $roleAdmin = Role::where('slug', 'admin')->first();
+        $rolePemilik = Role::where('slug', 'pemilik')->first();
 
-        $user = User::create([
-            'role_id' => $role->id,
+        $userAdmin = User::create([
+            'role_id' => $roleAdmin->id,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123'),
         ]);
@@ -28,7 +29,22 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin 1',
             'picture' => 'default.jpg',
             'phone' => '0895803409735',
-            'user_id' => $user->id,
+            'user_id' => $userAdmin->id,
+        ]);
+
+        $userPemilik = User::create([
+            'role_id' => $rolePemilik->id,
+            'email' => 'pemilik@gmail.com',
+            'password' => bcrypt('pemilik123'),
+        ]);
+
+        Pemilik::create([
+            'name' => 'Pemilik 1',
+            'user_id' => $userPemilik->id,
+            'picture' => 'default.jpg',
+            'ktp' => 'default.jpg',
+            'kk' => 'default.jpg',
+            'phone' => '0895803409735',
         ]);
     }
 }
